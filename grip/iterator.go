@@ -98,6 +98,10 @@ func (it *EventIterator) Next() (Event, error) {
 		}, nil
 
 	case "CLOSE":
+		if len(content) < 2 {
+			return CloseEvent{}, nil
+		}
+
 		return CloseEvent{
 			Code:   binary.BigEndian.Uint16(content),
 			Reason: string(content[2:]),
