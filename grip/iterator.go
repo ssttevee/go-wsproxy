@@ -9,6 +9,18 @@ import (
 	"strconv"
 )
 
+type UnexpectedEventTypeError string
+
+func (e UnexpectedEventTypeError) Error() string {
+	return "unexpected event type: " + string(e)
+}
+
+type InvalidContentSizeError string
+
+func (e InvalidContentSizeError) Error() string {
+	return "invalid content size: " + string(e)
+}
+
 var Done = errors.New("done")
 
 type EventIterator struct {
@@ -68,7 +80,7 @@ func (it *EventIterator) Next() (Event, error) {
 	var contentLength int64
 	if pos := bytes.IndexByte(line, ' '); pos != -1 {
 		if contentLength, err = strconv.ParseInt(string(line[pos+1:]), 16, 64); err != nil {
-			return nil, err
+			return nil, InvalidContentSizeError(line[pos+1:])
 		}
 
 		line = line[:pos]
@@ -108,6 +120,6 @@ func (it *EventIterator) Next() (Event, error) {
 		}, nil
 
 	default:
-		return nil, errors.New("unexpected event type: " + string(line))
+		return nil, UnexpectedEventTypeError(line)
 	}
 }
