@@ -11,6 +11,16 @@ const (
 	DisconnectEvent EmptyEvent = "DISCONNECT"
 )
 
+const (
+	EventTypeOpen          = "OPEN"
+	EventTypePing          = "PING"
+	EventTypePong          = "PONG"
+	EventTypeText          = "TEXT"
+	EventTypeBinary        = "BINARY"
+	EventTypeClose         = "CLOSE"
+	EventTypeDisconnection = "DISCONNECT"
+)
+
 type Event interface {
 	Type() string
 	Content() []byte
