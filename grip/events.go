@@ -93,3 +93,7 @@ func (e CloseEvent) Content() []byte {
 	copy(p[2:], e.Reason)
 	return p
 }
+
+func ParseCloseEventContent(content []byte) (code uint16, reason string) {
+	return binary.BigEndian.Uint16(content[:2]), string(content[2:])
+}
